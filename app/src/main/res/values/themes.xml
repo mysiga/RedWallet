@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BasePopupTheme" parent="ThemeOverlay.AppCompat.Dark" />
+    !-- app actionbar通用popup主题-->
+
+    <style name="AppPopupTheme" parent="BasePopupTheme" />
+
+    <!--ToolBar标题栏字体大小颜色-->
+    <style name="ToolBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">@dimen/size_toolbar_title_text</item>
+        <item name="android:textColor">@color/colorPrimaryText</item>
+    </style>
+    <!--ActionMenu字体大小颜色-->
+    <style name="ActionMenuText" parent="TextAppearance.AppCompat.Widget.ActionBar.Menu">
+        <item name="android:textSize">@dimen/size_toolbar_title_text</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+</resources>

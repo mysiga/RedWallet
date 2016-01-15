@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:accessibilityEventTypes="typeNotificationStateChanged|typeWindowStateChanged|typeViewScrolled"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:accessibilityFlags=""
+    android:canRetrieveWindowContent="true"
+    android:description="@string/server_description"
+    android:notificationTimeout="0"
+    android:packageNames="com.tencent.mm" />
+    <!--所有事件都监听-->
+    <!--android:accessibilityEventTypes="typeAllMask"-->
+
