@@ -10,7 +10,6 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
-import android.view.accessibility.AccessibilityManager;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Toast;
 
@@ -55,7 +54,6 @@ public class WalletService extends AccessibilityService {
                     for (CharSequence t : texts) {
                         String text = String.valueOf(t);
                         if (text.contains(WECHAT_RED_TEXT_KEY)) {
-                            Log.i(TAG, WECHAT_RED_TEXT_KEY);
                             openNotify(event);
                             break;
                         }
@@ -63,11 +61,9 @@ public class WalletService extends AccessibilityService {
                 }
                 break;
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                Log.i(TAG, "TYPE_WINDOW_STATE_CHANGED");
-                openHongBao(event);
+                switchClickRedWallet(event);
                 break;
             case AccessibilityEvent.TYPE_VIEW_SCROLLED:
-                Log.i(TAG, "TYPE_VIEW_SCROLLED");
                 //// TODO: 16/1/15 聊天页面抢红包,有问题
 //                violenceClick(event);
                 break;
@@ -91,19 +87,6 @@ public class WalletService extends AccessibilityService {
         Toast.makeText(this, "抢红包服务开启", Toast.LENGTH_SHORT).show();
     }
 
-    private void sendNotifyEvent() {
-        AccessibilityManager manager = (AccessibilityManager) getSystemService(ACCESSIBILITY_SERVICE);
-        if (!manager.isEnabled()) {
-            return;
-        }
-        AccessibilityEvent event = AccessibilityEvent.obtain(AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED);
-        event.setPackageName(WECHAT_PACKAGENAME);
-        event.setClassName(Notification.class.getName());
-        CharSequence tickerText = WECHAT_RED_TEXT_KEY;
-        event.getText().add(tickerText);
-        manager.sendAccessibilityEvent(event);
-    }
-
     /**
      * 打开通知栏消息
      */
@@ -113,14 +96,12 @@ public class WalletService extends AccessibilityService {
         if (parcelable == null || !(parcelable instanceof Notification)) {
             return;
         }
-        //以下是精华，将微信的通知栏消息打开
+        //微信的通知栏消息打开
         Notification notification = (Notification) parcelable;
         PendingIntent pendingIntent = notification.contentIntent;
-        Log.d(TAG, "开始--> pendingIntent.send()");
         isFirstChecked = true;
         try {
             pendingIntent.send();
-            Log.d(TAG, "--> pendingIntent.send()---end");
             clickRed();
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
@@ -128,7 +109,7 @@ public class WalletService extends AccessibilityService {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void openHongBao(AccessibilityEvent event) {
+    private void switchClickRedWallet(AccessibilityEvent event) {
         String eventName = String.valueOf(event.getClassName());
         if (TextUtils.isEmpty(eventName)) {
             return;
@@ -176,7 +157,6 @@ public class WalletService extends AccessibilityService {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void clickRed() {
-        Log.i(TAG, "clickRed():");
         AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
         if (nodeInfo == null) {
             Log.w(TAG, "rootWindow为空");
@@ -184,22 +164,17 @@ public class WalletService extends AccessibilityService {
         }
         List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(RECEIVE_RED_TEXT_KEY);
         if (list.isEmpty()) {
-            Log.i(TAG, "clickRed():list.isEmpty()");
             list = nodeInfo.findAccessibilityNodeInfosByText(WECHAT_RED_TEXT_KEY);
             if (!list.isEmpty()) {
                 for (AccessibilityNodeInfo n : list) {
-                    Log.i(TAG, "-->微信红包:" + n);
                     n.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     break;
                 }
             }
         } else {
             //最新的红包领起
-            Log.i(TAG, "clickRed():list!=null");
-            //最新的红包领起
             int size = list.size();
             AccessibilityNodeInfo parent = list.get(size - 1).getParent();
-            Log.i(TAG, "-->领取红包:" + parent);
             if (parent != null) {
                 if (isFirstChecked) {
                     parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
@@ -232,7 +207,6 @@ public class WalletService extends AccessibilityService {
                 //最新的红包领起
                 int size = list.size();
                 AccessibilityNodeInfo parent = list.get(size - 1).getParent();
-                Log.i(TAG, "-->领取红包:" + parent);
                 if (parent != null) {
                     parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                 }
