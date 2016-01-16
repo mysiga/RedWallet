@@ -135,18 +135,18 @@ public class WalletService extends AccessibilityService {
 
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void openRed() {
         AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
         if (nodeInfo == null) {
             Log.w(TAG, "rootWindow为空");
             return;
         }
-        //4.3.9更改id
-        List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/b2c");
+        //4.3.8text获取list
+        List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(OPEN_RED_TEXT_KEY);
         if (list.isEmpty()) {
-            //4.3.8text获取list
-            list = nodeInfo.findAccessibilityNodeInfosByText(OPEN_RED_TEXT_KEY);
+            //4.3.9更改id
+            list = nodeInfo.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/b2c");
         }
         if (list.isEmpty()) {
             list = nodeInfo.findAccessibilityNodeInfosByText(LOOK_DETAIL_TEXT_KEY);
@@ -154,8 +154,10 @@ public class WalletService extends AccessibilityService {
                 list = nodeInfo.findAccessibilityNodeInfosByText(LOOK_ALL_TEXT_KEY);
             }
         }
-        for (AccessibilityNodeInfo n : list) {
-            n.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+        if (!list.isEmpty()) {
+            for (AccessibilityNodeInfo n : list) {
+                n.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            }
         }
     }
 
