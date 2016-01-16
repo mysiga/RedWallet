@@ -38,7 +38,7 @@ public class WalletService extends AccessibilityService {
     public static final String OPEN_RED_TEXT_KEY = "拆红包";
     public static final String RECEIVE_RED_TEXT_KEY = "领取红包";
     public static final String LOOK_DETAIL_TEXT_KEY = "查看领取详情";
-    public static final String LOOK_ALL_TEXT_KEY = "看大家的手气";
+    public static final String LOOK_ALL_TEXT_KEY = "看看大家的手气";
 
     private boolean isFirstChecked;
 
@@ -142,8 +142,12 @@ public class WalletService extends AccessibilityService {
             Log.w(TAG, "rootWindow为空");
             return;
         }
-
-        List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(OPEN_RED_TEXT_KEY);
+        //4.3.9更改id
+        List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/b2c");
+        if (list.isEmpty()) {
+            //4.3.8text获取list
+            list = nodeInfo.findAccessibilityNodeInfosByText(OPEN_RED_TEXT_KEY);
+        }
         if (list.isEmpty()) {
             list = nodeInfo.findAccessibilityNodeInfosByText(LOOK_DETAIL_TEXT_KEY);
             if (list.isEmpty()) {
