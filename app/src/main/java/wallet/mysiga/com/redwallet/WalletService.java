@@ -69,7 +69,7 @@ public class WalletService extends AccessibilityService {
                 switchClickRedWallet(event);
                 break;
             case AccessibilityEvent.TYPE_VIEW_SCROLLED:
-                violenceClick(event);
+                windowScrollClickRedView(event);
                 break;
         }
     }
@@ -192,8 +192,9 @@ public class WalletService extends AccessibilityService {
         }
     }
 
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void violenceClick(AccessibilityEvent event) {
+    private void windowScrollClickRedView(AccessibilityEvent event) {
         String eventName = String.valueOf(event.getClassName());
         switch (eventName) {
             case "android.widget.ListView":
