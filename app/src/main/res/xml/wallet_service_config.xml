@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accessibilityEventTypes="typeNotificationStateChanged|typeWindowStateChanged|typeViewScrolled"
+    android:accessibilityEventTypes="typeWindowStateChanged|typeNotificationStateChanged"
     android:accessibilityFeedbackType="feedbackGeneric"
-    android:accessibilityFlags="flagReportViewIds"
     android:canRetrieveWindowContent="true"
     android:description="@string/server_description"
     android:notificationTimeout="0"
     android:packageNames="com.tencent.mm" />
+
+<!--监听动作类型-->
+<!--android:accessibilityEventTypes="typeNotificationStateChanged|typeWindowStateChanged|typeViewScrolled"-->
+<!--完成反馈动作类型-->
+<!--android:accessibilityFeedbackType="feedbackGeneric"-->
+<!--标识-->
+<!--android:accessibilityFlags=""-->
+<!--是否可以屏幕内容-->
+<!--android:canRetrieveWindowContent="true"-->
+<!--服务描述-->
+<!--android:description="@string/server_description"-->
+<!--通知反应时间-->
+<!--android:notificationTimeout="0"-->
+<!--监听应用包名-->
+<!--android:packageNames="com.tencent.mm" -->
     <!--所有事件都监听-->
     <!--android:accessibilityEventTypes="typeAllMask"-->
+    <!--android:accessibilityEventTypes="typeNotificationStateChanged|typeWindowStateChanged|typeViewScrolled"-->
 

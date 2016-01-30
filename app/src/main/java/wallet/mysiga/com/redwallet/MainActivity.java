@@ -12,7 +12,7 @@ import android.widget.Toast;
  *
  * @author Wilson
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,22 +30,29 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
 
-        findViewById(R.id.start_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                open();
-            }
-        });
-
+        findViewById(R.id.open_red_wallet_service).setOnClickListener(this);
+        findViewById(R.id.notification_mode).setOnClickListener(this);
+        findViewById(R.id.windows_mode).setOnClickListener(this);
     }
 
-    private void open() {
-        try {
-            Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            startActivity(intent);
-            Toast.makeText(this, "找到抢红包辅助服务，然后开启服务即可", Toast.LENGTH_LONG).show();
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.open_red_wallet_service:
+                try {
+                    Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                    startActivity(intent);
+                    Toast.makeText(this, "找到抢红包辅助服务，然后开启服务即可", Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
+            case R.id.notification_mode:
+                sendBroadcast(new Intent(WalletService.ACTION_NOTIFICATION_OPEN_RED));
+                break;
+            case R.id.windows_mode:
+                sendBroadcast(new Intent(WalletService.ACTION_WINDOWS_OPEN_RED));
+                break;
         }
     }
 }
