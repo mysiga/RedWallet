@@ -40,11 +40,11 @@ public class WalletService extends AccessibilityService {
     /***
      * 设置后台抢红包
      */
-    public static final String ACTION_NOTIFICATION_OPEN_RED = "set_notification_open_red";
+    public static final String ACTION_NOTIFICATION_OPEN_RED = "action_notification_open_red";
     /**
      * 设置当前界面抢红包
      */
-    public static final String ACTION_WINDOWS_OPEN_RED = "set_windows_open_red";
+    public static final String ACTION_WINDOWS_OPEN_RED = "action_windows_open_red";
 
     private boolean isFirstChecked;
     private RedWalletBroadcastReceiver mBroadcastReceiver;
@@ -116,7 +116,6 @@ public class WalletService extends AccessibilityService {
         isFirstChecked = true;
         try {
             pendingIntent.send();
-            clickRedWalletView();
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
         }
@@ -174,12 +173,7 @@ public class WalletService extends AccessibilityService {
             return;
         }
         List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(RECEIVE_RED_TEXT_KEY);
-        if (list.isEmpty()) {
-            list = nodeInfo.findAccessibilityNodeInfosByText(WECHAT_RED_TEXT_KEY);
-            if (!list.isEmpty()) {
-                list.get(list.size() - 1).performAction(AccessibilityNodeInfo.ACTION_CLICK);
-            }
-        } else {
+        if (list != null && !list.isEmpty()) {
             //最新的红包领起
             AccessibilityNodeInfo parent = list.get(list.size() - 1).getParent();
             if (parent != null) {
