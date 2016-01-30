@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1.微信不要设置自动更新\n2.目前适用微信版本:4.3.8\n3.请确认系统微信通知信息设置打开\n4.请保持屏幕常亮,不能锁屏" />
+        android:text="1.微信不要设置自动更新\n2.目前适用微信版本:4.3.9以下版本\n3.请确认系统微信通知信息设置打开\n4.请保持屏幕常亮,不能锁屏" />
 
     <Button
         android:id="@+id/open_red_wallet_service"
