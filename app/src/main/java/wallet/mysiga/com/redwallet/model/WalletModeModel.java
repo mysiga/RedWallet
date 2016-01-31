@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 模式实体类
  *
- * @author Wilson
+ * @author Wilson milin411@163.com
  */
 public class WalletModeModel implements Serializable {
     public String name;

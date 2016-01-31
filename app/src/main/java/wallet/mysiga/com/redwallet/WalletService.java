@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * 抢红包服务类
  *
- * @author Wilson
+ * @author Wilson milin411@163.com
  */
 public class WalletService extends AccessibilityService {
 
