@@ -1,2 +1,3 @@
 # RedWallet
-只是个人兴趣爱好，写了一个抢红包
+gif动画
+![Flipboard playing multiple GIFs](https://github.com/milin411/RedWallet/blob/develop/RebWallet.gif)
