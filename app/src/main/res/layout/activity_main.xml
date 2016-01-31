@@ -14,7 +14,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="1.微信不要设置自动更新\n2.目前适用微信版本:4.3.9以下版本\n3.请确认系统微信通知信息设置打开\n4.请保持屏幕常亮,不能锁屏" />
+        android:text="@string/version_info" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/current_mode" />
+
+        <Spinner
+            android:id="@+id/red_wallet_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/open_red_wallet_service"
@@ -24,15 +40,4 @@
         android:text="打开辅助服务"
         android:textSize="18sp" />
 
-    <Button
-        android:id="@+id/notification_mode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="切换为后台抢红包模式" />
-
-    <Button
-        android:id="@+id/windows_mode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="切换为聊天界面抢红包模式" />
 </LinearLayout>

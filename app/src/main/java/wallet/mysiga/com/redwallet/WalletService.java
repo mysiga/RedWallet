@@ -40,11 +40,11 @@ public class WalletService extends AccessibilityService {
     /***
      * 设置后台抢红包
      */
-    public static final String ACTION_NOTIFICATION_OPEN_RED = "action_notification_open_red";
+    public static final String INTENT_ACTION_NOTIFICATION_OPEN_RED = "com.redwallet.action_notification_open_red";
     /**
      * 设置当前界面抢红包
      */
-    public static final String ACTION_WINDOWS_OPEN_RED = "action_windows_open_red";
+    public static final String INTENT_ACTION_WINDOWS_OPEN_RED = "com.redwallet.action_windows_open_red";
 
     private boolean isFirstChecked;
     private RedWalletBroadcastReceiver mBroadcastReceiver;
@@ -79,6 +79,7 @@ public class WalletService extends AccessibilityService {
         if (mBroadcastReceiver != null) {
             unregisterReceiver(mBroadcastReceiver);
         }
+        sendBroadcast(new Intent(MainActivity.INTENT_ACTION_END));
         Toast.makeText(this, "中断抢红包服务", Toast.LENGTH_SHORT).show();
     }
 
@@ -87,6 +88,7 @@ public class WalletService extends AccessibilityService {
         if (mBroadcastReceiver != null) {
             unregisterReceiver(mBroadcastReceiver);
         }
+        sendBroadcast(new Intent(MainActivity.INTENT_ACTION_END));
         Toast.makeText(this, "服务器解绑", Toast.LENGTH_SHORT).show();
         return super.onUnbind(intent);
     }
@@ -94,13 +96,14 @@ public class WalletService extends AccessibilityService {
 
     @Override
     protected void onServiceConnected() {
-        Toast.makeText(this, "抢红包服务开启", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "抢红包服务已启动,默认为后台抢红包模式", Toast.LENGTH_SHORT).show();
         super.onServiceConnected();
         mBroadcastReceiver = new RedWalletBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(ACTION_NOTIFICATION_OPEN_RED);
-        intentFilter.addAction(ACTION_WINDOWS_OPEN_RED);
+        intentFilter.addAction(INTENT_ACTION_NOTIFICATION_OPEN_RED);
+        intentFilter.addAction(INTENT_ACTION_WINDOWS_OPEN_RED);
         registerReceiver(mBroadcastReceiver, intentFilter);
+        sendBroadcast(new Intent(MainActivity.INTENT_ACTION_CONNECTED));
     }
 
     /**
@@ -216,12 +219,12 @@ public class WalletService extends AccessibilityService {
             String type = intent.getAction();
             AccessibilityServiceInfo serviceInfo = getServiceInfo();
             switch (type) {
-                case ACTION_NOTIFICATION_OPEN_RED:
+                case INTENT_ACTION_NOTIFICATION_OPEN_RED:
                     serviceInfo.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
                     setServiceInfo(serviceInfo);
                     Toast.makeText(context, "切换后台抢红包成功", Toast.LENGTH_SHORT).show();
                     break;
-                case ACTION_WINDOWS_OPEN_RED:
+                case INTENT_ACTION_WINDOWS_OPEN_RED:
                     serviceInfo.eventTypes = AccessibilityEvent.TYPE_VIEW_SCROLLED | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
                     setServiceInfo(serviceInfo);
                     Toast.makeText(context, "切换window抢红包成功", Toast.LENGTH_SHORT).show();
