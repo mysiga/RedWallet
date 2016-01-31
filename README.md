@@ -1,7 +1,7 @@
 # RedWallet 微信抢红包
 git动画
 
-![Alt Image Text](http://7xn0ue.com1.z0.glb.clouddn.com/RebWallet.gif)
+![Flipboard playing multiple GIFs](http://7xn0ue.com1.z0.glb.clouddn.com/RebWallet.gif)
 
  - 当前抢红包有两种模式
  	-  外挂抢红包模式
