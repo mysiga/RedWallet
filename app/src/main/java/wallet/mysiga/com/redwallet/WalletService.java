@@ -180,7 +180,6 @@ public class WalletService extends AccessibilityService {
                 if (isFirstChecked) {
                     parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
                     isFirstChecked = false;
-                    openRedWalletView();
                 }
             }
         }
