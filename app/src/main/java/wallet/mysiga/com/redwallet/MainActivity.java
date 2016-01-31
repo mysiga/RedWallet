@@ -22,7 +22,7 @@ import wallet.mysiga.com.redwallet.model.WalletModeModel;
 /**
  * 主页
  *
- * @author Wilson
+ * @author Wilson milin411@163.com
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String INTENT_ACTION_CONNECTED = "com.redwallet.action_connected";
