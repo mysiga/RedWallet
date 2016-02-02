@@ -163,13 +163,16 @@ public class WalletService extends AccessibilityService {
             if (list.isEmpty()) {
                 list = nodeInfo.findAccessibilityNodeInfosByText(LOOK_ALL_TEXT_KEY);
             }
-        }
-        if (!list.isEmpty()) {
-            AccessibilityNodeInfo parent = list.get(list.size() - 1).getParent();
-            if (parent != null) {
-                parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            if (!list.isEmpty()) {
+                AccessibilityNodeInfo parent = list.get(list.size() - 1).getParent();
+                if (parent != null) {
+                    parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                }
             }
+        } else {
+            list.get(list.size() - 1).performAction(AccessibilityNodeInfo.ACTION_CLICK);
         }
+
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
