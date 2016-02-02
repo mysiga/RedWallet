@@ -45,6 +45,10 @@ public class WalletService extends AccessibilityService {
      * 设置当前界面抢红包
      */
     public static final String INTENT_ACTION_WINDOWS_OPEN_RED = "com.redwallet.action_windows_open_red";
+    /**
+     * 抢红包id
+     */
+    public static final String WHART_VIEW_ID = "com.tencent.mm:id/b43";
 
     private boolean isFirstChecked;
     private RedWalletBroadcastReceiver mBroadcastReceiver;
@@ -152,12 +156,8 @@ public class WalletService extends AccessibilityService {
             Log.w(TAG, "rootWindow为空");
             return;
         }
-        //4.3.8text获取list
-        List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(OPEN_RED_TEXT_KEY);
-        if (list.isEmpty()) {
-            //4.3.9更改id
-            list = nodeInfo.findAccessibilityNodeInfosByViewId("com.tencent.mm:id/b2c");
-        }
+        //V4.3.13.49
+        List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId(WHART_VIEW_ID);
         if (list.isEmpty()) {
             list = nodeInfo.findAccessibilityNodeInfosByText(LOOK_DETAIL_TEXT_KEY);
             if (list.isEmpty()) {
@@ -165,7 +165,10 @@ public class WalletService extends AccessibilityService {
             }
         }
         if (!list.isEmpty()) {
-            list.get(list.size() - 1).performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            AccessibilityNodeInfo parent = list.get(list.size() - 1).getParent();
+            if (parent != null) {
+                parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            }
         }
     }
 
