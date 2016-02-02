@@ -2,5 +2,5 @@
     <string name="app_name">抢红包助手</string>
     <string name="server_description">Android抢红包服务</string>
     <string name="current_mode">当前模式:</string>
-    <string name="version_info">1.微信不要设置自动更新\n2.目前适用微信版本:6.3.9以下版本\n3.请确认系统微信通知信息设置打开\n4.请保持屏幕常亮,不能锁屏</string>
+    <string name="version_info">1.微信不要设置自动更新\n2.目前适用微信版本:V4.3.13.49\n3.请确认系统微信通知信息设置打开\n4.请保持屏幕常亮,不能锁屏</string>
 </resources>
