@@ -11,14 +11,10 @@
 
     <include layout="@layout/include_common_appbar" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/version_info" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:orientation="horizontal">
 
         <TextView
@@ -32,12 +28,17 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/version_info" />
+
     <Button
         android:id="@+id/open_red_wallet_service"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="打开辅助服务"
+        android:text="@string/open_service"
         android:textSize="18sp" />
 
 </LinearLayout>

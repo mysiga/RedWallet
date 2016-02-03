@@ -3,7 +3,7 @@
     android:accessibilityEventTypes="typeWindowStateChanged|typeNotificationStateChanged"
     android:accessibilityFeedbackType="feedbackGeneric"
     android:canRetrieveWindowContent="true"
-    android:description="@string/server_description"
+    android:description="@string/app_name"
     android:notificationTimeout="0"
     android:packageNames="com.tencent.mm" />
 
