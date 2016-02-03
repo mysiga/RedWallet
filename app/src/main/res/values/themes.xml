@@ -9,7 +9,7 @@
     <!--ToolBar标题栏字体大小颜色-->
     <style name="ToolBarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">@dimen/size_toolbar_title_text</item>
-        <item name="android:textColor">@color/colorPrimaryText</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
     <!--ActionMenu字体大小颜色-->
     <style name="ActionMenuText" parent="TextAppearance.AppCompat.Widget.ActionBar.Menu">

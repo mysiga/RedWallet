@@ -18,6 +18,9 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import wallet.mysiga.com.redwallet.config.WalletPrefHelper;
+import wallet.mysiga.com.redwallet.config.WalletServiceSwitch;
+
 /**
  * 抢红包服务类
  *
@@ -33,7 +36,6 @@ public class WalletService extends AccessibilityService {
     /**
      * 拆红包
      */
-    public static final String OPEN_RED_TEXT_KEY = "拆红包";
     public static final String RECEIVE_RED_TEXT_KEY = "领取红包";
     public static final String LOOK_DETAIL_TEXT_KEY = "查看领取详情";
     public static final String LOOK_ALL_TEXT_KEY = "看看大家的手气";
@@ -83,8 +85,9 @@ public class WalletService extends AccessibilityService {
         if (mBroadcastReceiver != null) {
             unregisterReceiver(mBroadcastReceiver);
         }
+        WalletPrefHelper.setWalletServiceState(this, WalletServiceSwitch.STATE_NO_START);
         sendBroadcast(new Intent(MainActivity.INTENT_ACTION_END));
-        Toast.makeText(this, "中断抢红包服务", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.stop_service), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -93,21 +96,23 @@ public class WalletService extends AccessibilityService {
             unregisterReceiver(mBroadcastReceiver);
         }
         sendBroadcast(new Intent(MainActivity.INTENT_ACTION_END));
-        Toast.makeText(this, "服务器解绑", Toast.LENGTH_SHORT).show();
+        WalletPrefHelper.setWalletServiceState(this, WalletServiceSwitch.STATE_NO_START);
+        Toast.makeText(this, getString(R.string.unbind_service), Toast.LENGTH_SHORT).show();
         return super.onUnbind(intent);
     }
 
 
     @Override
     protected void onServiceConnected() {
-        Toast.makeText(this, "抢红包服务已启动,默认为后台抢红包模式", Toast.LENGTH_SHORT).show();
-        super.onServiceConnected();
         mBroadcastReceiver = new RedWalletBroadcastReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(INTENT_ACTION_NOTIFICATION_OPEN_RED);
         intentFilter.addAction(INTENT_ACTION_WINDOWS_OPEN_RED);
         registerReceiver(mBroadcastReceiver, intentFilter);
+        WalletPrefHelper.setWalletServiceState(this, WalletServiceSwitch.STATE_NOTIFICATION_SERVICE);
         sendBroadcast(new Intent(MainActivity.INTENT_ACTION_CONNECTED));
+        Toast.makeText(this, getString(R.string.service_start_default_notification), Toast.LENGTH_SHORT).show();
+        super.onServiceConnected();
     }
 
     /**
@@ -153,7 +158,6 @@ public class WalletService extends AccessibilityService {
     private void openRedWalletView() {
         AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
         if (nodeInfo == null) {
-            Log.w(TAG, "rootWindow为空");
             return;
         }
         //V4.3.13.49
@@ -223,17 +227,22 @@ public class WalletService extends AccessibilityService {
         @Override
         public void onReceive(Context context, Intent intent) {
             String type = intent.getAction();
+            if (type.isEmpty()) {
+                return;
+            }
             AccessibilityServiceInfo serviceInfo = getServiceInfo();
             switch (type) {
                 case INTENT_ACTION_NOTIFICATION_OPEN_RED:
                     serviceInfo.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
                     setServiceInfo(serviceInfo);
-                    Toast.makeText(context, "切换后台抢红包成功", Toast.LENGTH_SHORT).show();
+                    WalletPrefHelper.setWalletServiceState(context, WalletServiceSwitch.STATE_NOTIFICATION_SERVICE);
+                    Toast.makeText(context, context.getString(R.string.mode_notification), Toast.LENGTH_SHORT).show();
                     break;
                 case INTENT_ACTION_WINDOWS_OPEN_RED:
                     serviceInfo.eventTypes = AccessibilityEvent.TYPE_VIEW_SCROLLED | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
                     setServiceInfo(serviceInfo);
-                    Toast.makeText(context, "切换window抢红包成功", Toast.LENGTH_SHORT).show();
+                    WalletPrefHelper.setWalletServiceState(context, WalletServiceSwitch.STATE_WINDOWS_SERVICE);
+                    Toast.makeText(context, context.getString(R.string.mode_window), Toast.LENGTH_SHORT).show();
                     break;
             }
         }

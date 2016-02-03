@@ -1,11 +1,13 @@
 package wallet.mysiga.com.redwallet;
 
+import android.annotation.TargetApi;
+import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -17,23 +19,24 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import wallet.mysiga.com.redwallet.config.WalletPrefHelper;
+import wallet.mysiga.com.redwallet.config.WalletServiceSwitch;
 import wallet.mysiga.com.redwallet.model.WalletModeModel;
+import wallet.mysiga.com.redwallet.presenter.WalletPresenter;
+import wallet.mysiga.com.redwallet.view.IWalletView;
 
 /**
  * 主页
  *
  * @author Wilson milin411@163.com
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, IWalletView {
     public static final String INTENT_ACTION_CONNECTED = "com.redwallet.action_connected";
     public static final String INTENT_ACTION_END = "com.redwallet.action_end";
-    public static final String NO_START = "未启动服务";
 
-
-    private final ArrayList<WalletModeModel> modes = new ArrayList<>();
-    private final ArrayList<String> modeName = new ArrayList<>();
     private ArrayAdapter mModeAdapter;
     private ModeBroadcastReceiver modeBroadcastReceiver;
+    private WalletPresenter mWalletPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +54,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         Spinner modeView = (Spinner) findViewById(R.id.red_wallet_mode);
-        findViewById(R.id.open_red_wallet_service).setOnClickListener(this);
-
-        addModeData(new WalletModeModel(NO_START, null));
-        mModeAdapter = new ArrayAdapter(this, R.layout.item_common_title_spinner, modeName);
+        mWalletPresenter = new WalletPresenter(this);
+        mModeAdapter = new ArrayAdapter(this, R.layout.item_common_title_spinner, mWalletPresenter.getModeName());
         modeView.setAdapter(mModeAdapter);
         modeView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!modes.isEmpty()) {
-                    WalletModeModel mode = modes.get(position);
+                ArrayList<WalletModeModel> models = mWalletPresenter.getModes();
+                if (!models.isEmpty()) {
+                    WalletModeModel mode = models.get(position);
                     if (mode != null && !TextUtils.isEmpty(mode.mode)) {
                         sendBroadcast(new Intent(mode.mode));
                     }
@@ -77,8 +79,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         filter.addAction(INTENT_ACTION_CONNECTED);
         filter.addAction(INTENT_ACTION_END);
         registerReceiver(modeBroadcastReceiver, filter);
+
+        if (isServiceRunning()) {
+            int state = WalletPrefHelper.getWalletServiceState(getApplicationContext());
+            switch (state) {
+                case WalletServiceSwitch.STATE_NOTIFICATION_SERVICE:
+                    mWalletPresenter.initNotificationServiceState();
+                    break;
+                case WalletServiceSwitch.STATE_WINDOWS_SERVICE:
+                    mWalletPresenter.initWindowServiceState();
+                    break;
+            }
+        }
+
+        findViewById(R.id.open_red_wallet_service).setOnClickListener(this);
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private boolean isServiceRunning() {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        String simpleName = WalletService.class.getName();
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (simpleName.equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     protected void onDestroy() {
@@ -88,17 +115,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
     }
 
-    private void initModeView() {
-        clear();
-        addModeData(new WalletModeModel("外挂抢红包模式", WalletService.INTENT_ACTION_NOTIFICATION_OPEN_RED));
-        addModeData(new WalletModeModel("当前聊天窗口抢红包模式", WalletService.INTENT_ACTION_WINDOWS_OPEN_RED));
-        mModeAdapter.notifyDataSetChanged();
+    @Override
+    public void updateWalletServiceState() {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mModeAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
-    private void clearModeData() {
-        clear();
-        addModeData(new WalletModeModel(NO_START, null));
-        mModeAdapter.notifyDataSetChanged();
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     @Override
@@ -108,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 try {
                     Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
                     startActivity(intent);
-                    Toast.makeText(this, "找到抢红包辅助服务，然后开启服务即可", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "找到微信抢红包助手，并开启", Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -126,22 +155,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             switch (action) {
                 case INTENT_ACTION_CONNECTED:
-                    initModeView();
+                    mWalletPresenter.initNotificationServiceState();
                     break;
                 case INTENT_ACTION_END:
-                    clearModeData();
+                    mWalletPresenter.noStartService();
                     break;
             }
         }
     }
 
-    private void addModeData(@NonNull WalletModeModel model) {
-        modes.add(model);
-        modeName.add(model.name);
-    }
-
-    private void clear() {
-        modes.clear();
-        modeName.clear();
-    }
 }
