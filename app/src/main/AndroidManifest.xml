@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="wallet.mysiga.com.redwallet">
 
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

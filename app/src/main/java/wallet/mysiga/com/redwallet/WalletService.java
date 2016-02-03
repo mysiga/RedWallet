@@ -3,6 +3,7 @@ package wallet.mysiga.com.redwallet;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.TargetApi;
+import android.app.KeyguardManager;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Parcelable;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -178,9 +180,29 @@ public class WalletService extends AccessibilityService {
         }
 
     }
+    /**
+     * 检查屏幕是否亮着并且唤醒屏幕
+     */
+    @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
+    private void checkScreen(Context context) {
 
+        PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
+        if (!powerManager.isInteractive()) {
+            KeyguardManager keyguardManager = (KeyguardManager) context.getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
+            KeyguardManager.KeyguardLock kl = keyguardManager.newKeyguardLock("unLock");
+            // 解锁
+            kl.disableKeyguard();
+            // 获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+            PowerManager.WakeLock wl = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK, "bright");
+            // 点亮屏幕
+            wl.acquire();
+            // 释放
+            wl.release();
+        }
+    }
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void clickRedWalletView() {
+        checkScreen(this);
         AccessibilityNodeInfo nodeInfo = getRootInActiveWindow();
         if (nodeInfo == null) {
             return;
