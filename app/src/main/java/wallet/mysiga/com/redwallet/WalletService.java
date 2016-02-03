@@ -180,26 +180,27 @@ public class WalletService extends AccessibilityService {
         }
 
     }
+
     /**
      * 检查屏幕是否亮着并且唤醒屏幕
      */
     @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
     private void checkScreen(Context context) {
-
         PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
-        if (!powerManager.isInteractive()) {
+        if (!powerManager.isScreenOn()) {
             KeyguardManager keyguardManager = (KeyguardManager) context.getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
-            KeyguardManager.KeyguardLock kl = keyguardManager.newKeyguardLock("unLock");
+            KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("unLock");
             // 解锁
-            kl.disableKeyguard();
+            keyguardLock.disableKeyguard();
             // 获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
-            PowerManager.WakeLock wl = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK, "bright");
+            PowerManager.WakeLock wakeLock = powerManager.newWakeLock(PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.SCREEN_DIM_WAKE_LOCK, "bright");
             // 点亮屏幕
-            wl.acquire();
+            wakeLock.acquire();
             // 释放
-            wl.release();
+            wakeLock.release();
         }
     }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void clickRedWalletView() {
         checkScreen(this);
