@@ -1,11 +1,10 @@
 # RedWallet 微信抢红包
-git动画
-
-![Flipboard playing multiple GIFs](http://7xn0ue.com1.z0.glb.clouddn.com/RebWallet.gif)
 
  - 当前抢红包有两种模式
  	-  外挂模式
+ 	![Flipboard playing multiple GIFs](http://7xn0ue.com1.z0.glb.clouddn.com/%E5%A4%96%E6%8C%82%E6%A8%A1%E5%BC%8F%E5%A4%96%E6%8C%82%E6%A8%A1%E5%BC%8F.gif)
  	-  窗口模式
+ 	![Flipboard playing multiple GIFs](http://7xn0ue.com1.z0.glb.clouddn.com/%E7%AA%97%E5%8F%A3%E6%A8%A1%E5%BC%8F%E7%AA%97%E5%8F%A3%E6%A8%A1%E5%BC%8F.gif)
  -  外挂模式
  	- 开启服务默认就开启了"外挂抢红包模式"
  	- 外挂模式就是不在当前聊天界面聊天都可以抢红包
