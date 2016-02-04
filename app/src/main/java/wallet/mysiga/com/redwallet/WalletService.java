@@ -130,6 +130,8 @@ public class WalletService extends AccessibilityService {
         isFirstChecked = true;
         try {
             pendingIntent.send();
+            //解决在微信首页微信红包通知后无法触发AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED事件问题
+            clickRedWalletView();
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
         }
@@ -187,7 +189,7 @@ public class WalletService extends AccessibilityService {
     @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
     private void checkScreen(Context context) {
         PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
-        if (!powerManager.isScreenOn()) {
+        if (!powerManager.isInteractive()) {
             KeyguardManager keyguardManager = (KeyguardManager) context.getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
             KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("unLock");
             // 解锁
