@@ -130,6 +130,7 @@ public class WalletService extends AccessibilityService {
         isFirstChecked = true;
         try {
             pendingIntent.send();
+            //解决在微信首页微信红包通知后无法触发AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED事件问题
             clickRedWalletView();
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
