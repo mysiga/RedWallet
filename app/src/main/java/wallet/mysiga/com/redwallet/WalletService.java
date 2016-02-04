@@ -130,6 +130,7 @@ public class WalletService extends AccessibilityService {
         isFirstChecked = true;
         try {
             pendingIntent.send();
+            clickRedWalletView();
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
         }
@@ -187,7 +188,7 @@ public class WalletService extends AccessibilityService {
     @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
     private void checkScreen(Context context) {
         PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
-        if (!powerManager.isScreenOn()) {
+        if (!powerManager.isInteractive()) {
             KeyguardManager keyguardManager = (KeyguardManager) context.getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
             KeyguardManager.KeyguardLock keyguardLock = keyguardManager.newKeyguardLock("unLock");
             // 解锁
