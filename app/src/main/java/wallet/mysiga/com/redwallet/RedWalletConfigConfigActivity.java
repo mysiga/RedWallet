@@ -23,14 +23,14 @@ import wallet.mysiga.com.redwallet.config.WalletPrefHelper;
 import wallet.mysiga.com.redwallet.config.WalletServiceSwitch;
 import wallet.mysiga.com.redwallet.model.WalletModeModel;
 import wallet.mysiga.com.redwallet.presenter.WalletPresenter;
-import wallet.mysiga.com.redwallet.view.IWalletView;
+import wallet.mysiga.com.redwallet.view.IWalletConfigView;
 
 /**
  * 主页
  *
  * @author Wilson milin411@163.com
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, IWalletView {
+public class RedWalletConfigConfigActivity extends AppCompatActivity implements View.OnClickListener, IWalletConfigView {
     public static final String INTENT_ACTION_CONNECTED = "com.redwallet.action_connected";
     public static final String INTENT_ACTION_END = "com.redwallet.action_end";
 
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private boolean isServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        String simpleName = WalletService.class.getName();
+        String simpleName = WalletServiceView.class.getName();
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (simpleName.equals(service.service.getClassName())) {
                 return true;

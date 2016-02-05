@@ -20,6 +20,9 @@ public class WalletPrefHelper {
 
     private static class WalletConfig {
         private static final String APP_NAME = "redwallet";
+        /**
+         * 服务状态运行状态
+         */
         private static final String SERVICE_STATE = "serivce_state";
     }
 

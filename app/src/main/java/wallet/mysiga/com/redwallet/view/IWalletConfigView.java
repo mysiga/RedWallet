@@ -3,9 +3,10 @@ package wallet.mysiga.com.redwallet.view;
 import android.content.Context;
 
 /**
- * Created by wuming on 16/2/3.
+ * 配置接口类
+ * @author Wilson milin411@163.com
  */
-public interface IWalletView {
+public interface IWalletConfigView {
 
     void updateWalletServiceState();
 
