@@ -21,23 +21,24 @@ import wallet.mysiga.com.redwallet.view.IWalletServiceView;
 
 /**
  * 服务处理类
+ *
  * @author Wilson milin411@163.com
  */
 public class WalletServicePresenter {
     /**
      * 红包消息的关键字
      */
-    public static final String WECHAT_RED_TEXT_KEY = "[微信红包]";
+    private static final String WECHAT_RED_TEXT_KEY = "[微信红包]";
     /**
      * 拆红包
      */
-    public static final String RECEIVE_RED_TEXT_KEY = "领取红包";
-    public static final String LOOK_DETAIL_TEXT_KEY = "查看领取详情";
-    public static final String LOOK_ALL_TEXT_KEY = "看看大家的手气";
+    private static final String RECEIVE_RED_TEXT_KEY = "领取红包";
+    private static final String LOOK_DETAIL_TEXT_KEY = "查看领取详情";
+    private static final String LOOK_ALL_TEXT_KEY = "看看大家的手气";
     /**
      * 抢红包id
      */
-    public static final String WHART_VIEW_ID = "com.tencent.mm:id/b43";
+    private static final String WHART_VIEW_ID = "com.tencent.mm:id/b43";
     private IWalletServiceView mWalletServiceView;
     private boolean mIsFirstChecked;
     private Handler mHandler;
@@ -56,20 +57,20 @@ public class WalletServicePresenter {
         //通知栏事件
         switch (eventType) {
             case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
-                if (isRedWallet(event)) {
-                    openNotification(event, context);
+                if (isWeChatRedWallet(event)) {
+                    openRedWalletNotification(event, context);
                 }
                 break;
             case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                switchClickRedWallet(event, context);
+                switchRedWalletView(event, context);
                 break;
             case AccessibilityEvent.TYPE_VIEW_SCROLLED:
-                windowScrollClickRedView(event);
+                quickReceiveRedView(event);
                 break;
         }
     }
 
-    private boolean isRedWallet(AccessibilityEvent event) {
+    private boolean isWeChatRedWallet(AccessibilityEvent event) {
         List<CharSequence> messages = event.getText();
         if (!messages.isEmpty()) {
             String message = String.valueOf(messages.get(0));
@@ -84,7 +85,7 @@ public class WalletServicePresenter {
      * 打开通知栏消息
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void openNotification(@NonNull AccessibilityEvent event, @NonNull Context context) {
+    private void openRedWalletNotification(@NonNull AccessibilityEvent event, @NonNull Context context) {
         Parcelable parcelable = event.getParcelableData();
         if (parcelable == null || !(parcelable instanceof Notification)) {
             return;
@@ -94,25 +95,25 @@ public class WalletServicePresenter {
         try {
             pendingIntent.send();
             //解决在微信首页微信红包通知后无法触发AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED事件问题
-            clickRedWalletView(context);
+            receiveRedWalletView(context);
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
         }
     }
 
-    private void switchClickRedWallet(@NonNull AccessibilityEvent event, @NonNull Context context) {
+    private void switchRedWalletView(@NonNull AccessibilityEvent event, @NonNull Context context) {
         String eventName = String.valueOf(event.getClassName());
         switch (eventName) {
             case "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI"://拆红包界面
                 //拆红包
-                openRedWalletView();
+                selectRedWalletView();
                 break;
             case "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI"://红包详情页面
                 //拆完红包后看详细的纪录界面
                 break;
             case "com.tencent.mm.ui.LauncherUI"://聊天界面
                 //点中领取红包
-                clickRedWalletView(context);
+                receiveRedWalletView(context);
                 break;
             default:
                 break;
@@ -121,7 +122,7 @@ public class WalletServicePresenter {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void openRedWalletView() {
+    private void selectRedWalletView() {
         AccessibilityNodeInfo nodeInfo = mWalletServiceView.getAccessibilityService().getRootInActiveWindow();
         if (nodeInfo == null) {
             return;
@@ -159,11 +160,18 @@ public class WalletServicePresenter {
 
     }
 
+    private Handler getHandler() {
+        if (mHandler == null) {
+            mHandler = new Handler(Looper.getMainLooper());
+        }
+        return mHandler;
+    }
+
     /**
      * 检查屏幕是否亮着并且唤醒屏幕
      */
     @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
-    private void checkScreen(@NonNull Context context) {
+    private void wakeScreen(@NonNull Context context) {
         PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
         if (!powerManager.isInteractive()) {
             KeyguardManager keyguardManager = (KeyguardManager) context.getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
@@ -180,8 +188,8 @@ public class WalletServicePresenter {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void clickRedWalletView(@NonNull Context context) {
-        checkScreen(context);
+    private void receiveRedWalletView(@NonNull Context context) {
+        wakeScreen(context);
         AccessibilityNodeInfo nodeInfo = mWalletServiceView.getAccessibilityService().getRootInActiveWindow();
         if (nodeInfo == null) {
             return;
@@ -199,15 +207,9 @@ public class WalletServicePresenter {
         }
     }
 
-    private Handler getHandler() {
-        if (mHandler == null) {
-            mHandler = new Handler(Looper.getMainLooper());
-        }
-        return mHandler;
-    }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void windowScrollClickRedView(AccessibilityEvent event) {
+    private void quickReceiveRedView(@NonNull AccessibilityEvent event) {
         String eventName = String.valueOf(event.getClassName());
         switch (eventName) {
             case "android.widget.ListView":
