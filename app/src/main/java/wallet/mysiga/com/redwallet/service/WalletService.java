@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet;
+package wallet.mysiga.com.redwallet.service;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
@@ -9,17 +9,19 @@ import android.content.IntentFilter;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
+import wallet.mysiga.com.redwallet.R;
+import wallet.mysiga.com.redwallet.RedWalletConfigActivity;
 import wallet.mysiga.com.redwallet.config.WalletPrefHelper;
 import wallet.mysiga.com.redwallet.config.WalletServiceSwitch;
-import wallet.mysiga.com.redwallet.presenter.WalletServicePresenter;
-import wallet.mysiga.com.redwallet.view.IWalletServiceView;
+import wallet.mysiga.com.redwallet.service.mvp.WalletServicePresenter;
+import wallet.mysiga.com.redwallet.service.mvp.IWalletService;
 
 /**
  * 抢红包服务类
  *
  * @author Wilson milin411@163.com
  */
-public class WalletServiceView extends AccessibilityService implements IWalletServiceView {
+public class WalletService extends AccessibilityService implements IWalletService {
 
     /***
      * 设置后台抢红包
@@ -53,7 +55,7 @@ public class WalletServiceView extends AccessibilityService implements IWalletSe
             unregisterReceiver(mBroadcastReceiver);
         }
         WalletPrefHelper.setWalletServiceState(this, WalletServiceSwitch.STATE_NO_START);
-        sendBroadcast(new Intent(RedWalletConfigConfigActivity.INTENT_ACTION_END));
+        sendBroadcast(new Intent(RedWalletConfigActivity.INTENT_ACTION_END));
         Toast.makeText(this, getString(R.string.stop_service), Toast.LENGTH_SHORT).show();
     }
 
@@ -62,7 +64,7 @@ public class WalletServiceView extends AccessibilityService implements IWalletSe
         if (mBroadcastReceiver != null) {
             unregisterReceiver(mBroadcastReceiver);
         }
-        sendBroadcast(new Intent(RedWalletConfigConfigActivity.INTENT_ACTION_END));
+        sendBroadcast(new Intent(RedWalletConfigActivity.INTENT_ACTION_END));
         WalletPrefHelper.setWalletServiceState(this, WalletServiceSwitch.STATE_NO_START);
         Toast.makeText(this, getString(R.string.unbind_service), Toast.LENGTH_SHORT).show();
         return super.onUnbind(intent);
@@ -77,7 +79,7 @@ public class WalletServiceView extends AccessibilityService implements IWalletSe
         intentFilter.addAction(INTENT_ACTION_WINDOWS_OPEN_RED);
         registerReceiver(mBroadcastReceiver, intentFilter);
         WalletPrefHelper.setWalletServiceState(this, WalletServiceSwitch.STATE_NOTIFICATION_SERVICE);
-        sendBroadcast(new Intent(RedWalletConfigConfigActivity.INTENT_ACTION_CONNECTED));
+        sendBroadcast(new Intent(RedWalletConfigActivity.INTENT_ACTION_CONNECTED));
         Toast.makeText(this, getString(R.string.service_start_default_notification), Toast.LENGTH_SHORT).show();
         super.onServiceConnected();
     }

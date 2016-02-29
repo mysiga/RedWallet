@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".RedWalletConfigConfigActivity"
+            android:name=".RedWalletConfigActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".WalletServiceView"
+            android:name=".service.WalletService"
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name"

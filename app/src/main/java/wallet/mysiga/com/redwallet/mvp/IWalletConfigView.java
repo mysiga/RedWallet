@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet.view;
+package wallet.mysiga.com.redwallet.mvp;
 
 import android.content.Context;
 
@@ -7,8 +7,14 @@ import android.content.Context;
  * @author Wilson milin411@163.com
  */
 public interface IWalletConfigView {
-
+    /**
+     * 更新服务器状态
+     */
     void updateWalletServiceState();
 
+    /**
+     *  获取上下文
+     * @return
+     */
     Context getContext();
 }

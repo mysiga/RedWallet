@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet.view;
+package wallet.mysiga.com.redwallet.service.mvp;
 
 import android.accessibilityservice.AccessibilityService;
 
@@ -7,6 +7,6 @@ import android.accessibilityservice.AccessibilityService;
  *
  * @author Wlison milin411@163.com
  */
-public interface IWalletServiceView {
+public interface IWalletService {
     AccessibilityService getAccessibilityService();
 }

@@ -3,14 +3,18 @@ package wallet.mysiga.com.redwallet;
 import android.annotation.TargetApi;
 import android.app.ActivityManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,21 +26,33 @@ import java.util.ArrayList;
 import wallet.mysiga.com.redwallet.config.WalletPrefHelper;
 import wallet.mysiga.com.redwallet.config.WalletServiceSwitch;
 import wallet.mysiga.com.redwallet.model.WalletModeModel;
-import wallet.mysiga.com.redwallet.presenter.WalletPresenter;
-import wallet.mysiga.com.redwallet.view.IWalletConfigView;
+import wallet.mysiga.com.redwallet.mvp.IWalletConfigView;
+import wallet.mysiga.com.redwallet.mvp.WalletPresenter;
+import wallet.mysiga.com.redwallet.service.WalletService;
 
 /**
  * 主页
  *
  * @author Wilson milin411@163.com
  */
-public class RedWalletConfigConfigActivity extends AppCompatActivity implements View.OnClickListener, IWalletConfigView {
+public class RedWalletConfigActivity extends AppCompatActivity implements View.OnClickListener, IWalletConfigView {
     public static final String INTENT_ACTION_CONNECTED = "com.redwallet.action_connected";
     public static final String INTENT_ACTION_END = "com.redwallet.action_end";
 
     private ArrayAdapter mModeAdapter;
     private ModeBroadcastReceiver modeBroadcastReceiver;
     private WalletPresenter mWalletPresenter;
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.i(RedWalletConfigActivity.class.getSimpleName(), "onServiceConnected");
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.i(RedWalletConfigActivity.class.getSimpleName(), "onServiceDisconnected");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +90,7 @@ public class RedWalletConfigConfigActivity extends AppCompatActivity implements 
             }
         });
 
+
         modeBroadcastReceiver = new ModeBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction(INTENT_ACTION_CONNECTED);
@@ -98,7 +115,7 @@ public class RedWalletConfigConfigActivity extends AppCompatActivity implements 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private boolean isServiceRunning() {
         ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-        String simpleName = WalletServiceView.class.getName();
+        String simpleName = WalletService.class.getName();
         for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (simpleName.equals(service.service.getClassName())) {
                 return true;

@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet.presenter;
+package wallet.mysiga.com.redwallet.service.mvp;
 
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
@@ -16,8 +16,6 @@ import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.List;
-
-import wallet.mysiga.com.redwallet.view.IWalletServiceView;
 
 /**
  * 服务处理类
@@ -39,11 +37,11 @@ public class WalletServicePresenter {
      * 抢红包id
      */
     private static final String WHART_VIEW_ID = "com.tencent.mm:id/b43";
-    private IWalletServiceView mWalletServiceView;
+    private IWalletService mWalletServiceView;
     private boolean mIsFirstChecked;
     private Handler mHandler;
 
-    public WalletServicePresenter(@NonNull IWalletServiceView walletServiceView) {
+    public WalletServicePresenter(@NonNull IWalletService walletServiceView) {
         mWalletServiceView = walletServiceView;
     }
 

@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet.presenter;
+package wallet.mysiga.com.redwallet.mvp;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -6,9 +6,8 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 
 import wallet.mysiga.com.redwallet.R;
-import wallet.mysiga.com.redwallet.WalletServiceView;
+import wallet.mysiga.com.redwallet.service.WalletService;
 import wallet.mysiga.com.redwallet.model.WalletModeModel;
-import wallet.mysiga.com.redwallet.view.IWalletConfigView;
 
 /**
  * @author Wilson milin411@163.com
@@ -18,7 +17,7 @@ public class WalletPresenter {
     private final ArrayList<String> modeName = new ArrayList<>();
     private IWalletConfigView mWalletView;
 
-    public WalletPresenter(IWalletConfigView walletView) {
+    public WalletPresenter(@NonNull IWalletConfigView walletView) {
         this.mWalletView = walletView;
     }
 
@@ -40,8 +39,8 @@ public class WalletPresenter {
         modes.clear();
         modeName.clear();
         Context context = mWalletView.getContext();
-        addModeData(new WalletModeModel(context.getString(R.string.mode_notification), WalletServiceView.INTENT_ACTION_NOTIFICATION_OPEN_RED));
-        addModeData(new WalletModeModel(context.getString(R.string.mode_window), WalletServiceView.INTENT_ACTION_WINDOWS_OPEN_RED));
+        addModeData(new WalletModeModel(context.getString(R.string.mode_notification), WalletService.INTENT_ACTION_NOTIFICATION_OPEN_RED));
+        addModeData(new WalletModeModel(context.getString(R.string.mode_window), WalletService.INTENT_ACTION_WINDOWS_OPEN_RED));
         mWalletView.updateWalletServiceState();
     }
 
@@ -49,8 +48,8 @@ public class WalletPresenter {
         modes.clear();
         modeName.clear();
         Context context = mWalletView.getContext();
-        addModeData(new WalletModeModel(context.getString(R.string.mode_window), WalletServiceView.INTENT_ACTION_WINDOWS_OPEN_RED));
-        addModeData(new WalletModeModel(context.getString(R.string.mode_notification), WalletServiceView.INTENT_ACTION_NOTIFICATION_OPEN_RED));
+        addModeData(new WalletModeModel(context.getString(R.string.mode_window), WalletService.INTENT_ACTION_WINDOWS_OPEN_RED));
+        addModeData(new WalletModeModel(context.getString(R.string.mode_notification), WalletService.INTENT_ACTION_NOTIFICATION_OPEN_RED));
         mWalletView.updateWalletServiceState();
     }
 
