@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="@string/pref_key_mode"
+        android:summaryOff="窗口模式"
+        android:persistent="true"
+        android:summaryOn="外挂模式"
+        android:title="选择模式:" />
+</PreferenceScreen>

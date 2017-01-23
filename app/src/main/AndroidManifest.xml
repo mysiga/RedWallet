@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="wallet.mysiga.com.redwallet">
+    package="com.mysiga.wallet">
 
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".RedWalletConfigConfigActivity"
+            android:name="com.mysiga.wallet.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <service
-            android:name=".WalletServiceView"
+            android:name=".service.WalletService"
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name"

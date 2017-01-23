@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet.view;
+package com.mysiga.wallet.interfaces;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet.model;
+package com.mysiga.wallet.model;
 
 import java.io.Serializable;
 

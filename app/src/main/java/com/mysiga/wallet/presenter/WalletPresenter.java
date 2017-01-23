@@ -1,14 +1,14 @@
-package wallet.mysiga.com.redwallet.presenter;
+package com.mysiga.wallet.presenter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
+import com.mysiga.wallet.R;
+import com.mysiga.wallet.interfaces.IWalletConfigView;
+import com.mysiga.wallet.model.WalletModeModel;
+import com.mysiga.wallet.service.WalletService;
 
-import wallet.mysiga.com.redwallet.R;
-import wallet.mysiga.com.redwallet.WalletServiceView;
-import wallet.mysiga.com.redwallet.model.WalletModeModel;
-import wallet.mysiga.com.redwallet.view.IWalletConfigView;
+import java.util.ArrayList;
 
 /**
  * @author Wilson milin411@163.com
@@ -40,8 +40,7 @@ public class WalletPresenter {
         modes.clear();
         modeName.clear();
         Context context = mWalletView.getContext();
-        addModeData(new WalletModeModel(context.getString(R.string.mode_notification), WalletServiceView.INTENT_ACTION_NOTIFICATION_OPEN_RED));
-        addModeData(new WalletModeModel(context.getString(R.string.mode_window), WalletServiceView.INTENT_ACTION_WINDOWS_OPEN_RED));
+        addModeData(new WalletModeModel(context.getString(R.string.mode_notification), WalletService.INTENT_ACTION_CHANGE_MODE));
         mWalletView.updateWalletServiceState();
     }
 
@@ -49,8 +48,7 @@ public class WalletPresenter {
         modes.clear();
         modeName.clear();
         Context context = mWalletView.getContext();
-        addModeData(new WalletModeModel(context.getString(R.string.mode_window), WalletServiceView.INTENT_ACTION_WINDOWS_OPEN_RED));
-        addModeData(new WalletModeModel(context.getString(R.string.mode_notification), WalletServiceView.INTENT_ACTION_NOTIFICATION_OPEN_RED));
+        addModeData(new WalletModeModel(context.getString(R.string.mode_notification), WalletService.INTENT_ACTION_CHANGE_MODE));
         mWalletView.updateWalletServiceState();
     }
 

@@ -1,11 +1,13 @@
 <resources>
-    <string name="app_name">微信抢红包助手</string>
+    <string name="app_name">微信助手</string>
     <string name="current_mode">当前模式:</string>
-    <string name="version_info">说明:\n1.微信不要设置自动更新\n2.目前适用微信版本:V4.3.13.49\n3.请确认系统微信通知信息设置打开\n4.请保持屏幕常亮,不能锁屏\n5.外挂模式为后台自动抢红包模式\n6.窗口模式为抢当前聊天页面窗口红包模式</string>
+    <string name="version_info">说明:\n1.微信不要设置自动更新\n2.目前适用微信版本:V6.5.4\n3.请确认系统微信通知信息设置打开\n4.请保持屏幕常亮,不能锁屏\n5.外挂模式为后台自动抢红包模式\n6.窗口模式为抢当前聊天页面窗口红包模式</string>
     <string name="mode_notification">外挂模式</string>
     <string name="mode_window">窗口模式</string>
     <string name="service_start_default_notification">抢红包服务已启动,默认为外挂模式</string>
     <string name="stop_service">中断抢红包服务</string>
     <string name="unbind_service">服务器解绑</string>
-    <string name="open_service">打开微信抢红包助手服务</string>
+    <string name="open_service">打开微信助手服务</string>
+    <string name="service_running">微信助手服务已开启</string>
+    <string name="pref_key_mode">pref_key_mode</string>
 </resources>

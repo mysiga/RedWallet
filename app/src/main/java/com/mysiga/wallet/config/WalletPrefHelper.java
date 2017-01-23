@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet.config;
+package com.mysiga.wallet.config;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

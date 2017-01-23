@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet.presenter;
+package com.mysiga.wallet.presenter;
 
 import android.annotation.TargetApi;
 import android.app.KeyguardManager;
@@ -17,7 +17,7 @@ import android.view.accessibility.AccessibilityNodeInfo;
 
 import java.util.List;
 
-import wallet.mysiga.com.redwallet.view.IWalletServiceView;
+import com.mysiga.wallet.interfaces.IWalletServiceView;
 
 /**
  * 服务处理类
@@ -38,7 +38,21 @@ public class WalletServicePresenter {
     /**
      * 抢红包id
      */
-    private static final String WHART_VIEW_ID = "com.tencent.mm:id/b43";
+    private static final String WHART_VIEW_ID = "com.tencent.mm:id/bi3";
+
+    /**
+     * 拆红包界面
+     */
+    public static final String LUCKY_MONEY_RECEIVE_UI = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI";
+    /**
+     * //红包详情页面
+     */
+    public static final String LUCKY_MONEY_DETAIL_UI = "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI";
+    /**
+     * 聊天界面
+     */
+    public static final String LAUNCHER_UI = "com.tencent.mm.ui.LauncherUI";
+    public static final String LIST_VIEW = "android.widget.ListView";
     private IWalletServiceView mWalletServiceView;
     private boolean mIsFirstChecked;
     private Handler mHandler;
@@ -51,22 +65,19 @@ public class WalletServicePresenter {
         mIsFirstChecked = isFirstChecked;
     }
 
-    public synchronized void onAccessibilityEvent(@NonNull AccessibilityEvent event, @NonNull Context context) {
+    public void onAccessibilityEvent(@NonNull AccessibilityEvent event, @NonNull Context context) {
         final int eventType = event.getEventType();
         Log.d(this.getClass().getSimpleName(), "事件---->" + event);
         //通知栏事件
-        switch (eventType) {
-            case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
-                if (isWeChatRedWallet(event)) {
-                    openRedWalletNotification(event, context);
-                }
-                break;
-            case AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED:
-                switchRedWalletView(event, context);
-                break;
-            case AccessibilityEvent.TYPE_VIEW_SCROLLED:
-                quickReceiveRedView(event);
-                break;
+        if (eventType == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+            if (isWeChatRedWallet(event)) {
+                openRedWalletNotification(event, context);
+            }
+        } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
+            switchRedWalletView(event, context);
+
+        } else if (eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
+            quickReceiveRedView(event);
         }
     }
 
@@ -103,20 +114,15 @@ public class WalletServicePresenter {
 
     private void switchRedWalletView(@NonNull AccessibilityEvent event, @NonNull Context context) {
         String eventName = String.valueOf(event.getClassName());
-        switch (eventName) {
-            case "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyReceiveUI"://拆红包界面
-                //拆红包
-                selectRedWalletView();
-                break;
-            case "com.tencent.mm.plugin.luckymoney.ui.LuckyMoneyDetailUI"://红包详情页面
-                //拆完红包后看详细的纪录界面
-                break;
-            case "com.tencent.mm.ui.LauncherUI"://聊天界面
-                //点中领取红包
-                receiveRedWalletView(context);
-                break;
-            default:
-                break;
+        //拆红包界面
+        if (eventName.equals(LUCKY_MONEY_RECEIVE_UI)) {
+            //拆红包
+            selectRedWalletView();
+        } else if (eventName.equals(LUCKY_MONEY_DETAIL_UI)) {
+            ////红包详情页面,拆完红包后看详细的纪录界面
+        } else if (eventName.equals(LAUNCHER_UI)) {
+            ////红包详情页面,点中领取红包
+            receiveRedWalletView(context);
         }
 
     }
@@ -211,23 +217,21 @@ public class WalletServicePresenter {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void quickReceiveRedView(@NonNull AccessibilityEvent event) {
         String eventName = String.valueOf(event.getClassName());
-        switch (eventName) {
-            case "android.widget.ListView":
-                //在聊天界面,点击"领取红包"
-                AccessibilityNodeInfo nodeInfo = mWalletServiceView.getAccessibilityService().getRootInActiveWindow();
-                if (nodeInfo == null) {
-                    return;
-                }
-                List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(WalletServicePresenter.RECEIVE_RED_TEXT_KEY);
-                if (list == null || list.isEmpty()) {
-                    return;
-                }
-                //最新的红包领起
-                AccessibilityNodeInfo parent = list.get(list.size() - 1).getParent();
-                if (parent != null) {
-                    parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                }
-                break;
+        if (eventName.equals(LIST_VIEW)) {
+            //在聊天界面,点击"领取红包"
+            AccessibilityNodeInfo nodeInfo = mWalletServiceView.getAccessibilityService().getRootInActiveWindow();
+            if (nodeInfo == null) {
+                return;
+            }
+            List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByText(WalletServicePresenter.RECEIVE_RED_TEXT_KEY);
+            if (list == null || list.isEmpty()) {
+                return;
+            }
+            //最新的红包领起
+            AccessibilityNodeInfo parent = list.get(list.size() - 1).getParent();
+            if (parent != null) {
+                parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+            }
         }
 
     }

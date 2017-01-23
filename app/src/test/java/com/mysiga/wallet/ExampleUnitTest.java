@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet;
+package com.mysiga.wallet;
 
 import org.junit.Test;
 

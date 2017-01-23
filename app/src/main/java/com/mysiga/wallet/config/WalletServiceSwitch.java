@@ -1,4 +1,4 @@
-package wallet.mysiga.com.redwallet.config;
+package com.mysiga.wallet.config;
 
 import android.support.annotation.IntDef;
 
