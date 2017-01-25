@@ -5,3 +5,12 @@
 .DS_Store
 /build
 /captures
+*.iml
+.idea/
+*.class
+bin
+*/bin
+*/gen
+/output
+*/output
+RedWalletV1.0.6.apk

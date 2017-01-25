@@ -20,7 +20,7 @@ import java.util.List;
 import com.mysiga.wallet.interfaces.IWalletServiceView;
 
 /**
- * 服务处理类
+ * wallet service control
  *
  * @author Wilson milin411@163.com
  */

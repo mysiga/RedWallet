@@ -5,6 +5,7 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.view.accessibility.AccessibilityEvent;
@@ -28,6 +29,7 @@ public class WalletService extends AccessibilityService implements IWalletServic
 
 
     private WalletServicePresenter mWalletServicePresenter;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     public void onCreate() {
@@ -44,13 +46,23 @@ public class WalletService extends AccessibilityService implements IWalletServic
 
     @Override
     public void onInterrupt() {
-        
+
     }
 
     @Override
     protected void onServiceConnected() {
-        changeMode(PreferenceManager.getDefaultSharedPreferences(this));
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        changeMode(mSharedPreferences);
+        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         super.onServiceConnected();
+    }
+
+    @Override
+    public void unbindService(ServiceConnection conn) {
+        if (mSharedPreferences != null) {
+            mSharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        }
+        super.unbindService(conn);
     }
 
     @Override
@@ -73,16 +85,6 @@ public class WalletService extends AccessibilityService implements IWalletServic
             serviceInfo.eventTypes = AccessibilityEvent.TYPE_VIEW_SCROLLED | AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED;
             setServiceInfo(serviceInfo);
             mWalletServicePresenter.setIsFirstChecked(false);
-        }
-    }
-
-    class RedWalletBroadcastReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String type = intent.getAction();
-            if (type.equals(INTENT_ACTION_CHANGE_MODE)) {
-            }
-
         }
     }
 }

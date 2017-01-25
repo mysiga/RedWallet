@@ -9,5 +9,6 @@
     <string name="unbind_service">服务器解绑</string>
     <string name="open_service">打开微信助手服务</string>
     <string name="service_running">微信助手服务已开启</string>
+    <string name="open_wechat_assister">找到微信抢助手，并开启</string>
     <string name="pref_key_mode">pref_key_mode</string>
 </resources>
