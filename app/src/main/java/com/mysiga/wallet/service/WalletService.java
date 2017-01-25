@@ -22,12 +22,6 @@ import com.mysiga.wallet.interfaces.IWalletServiceView;
 public class WalletService extends AccessibilityService implements IWalletServiceView,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    /***
-     * change red wallet mode
-     */
-    public static final String INTENT_ACTION_CHANGE_MODE = "com.mysiga.wallet.INTENT_ACTION_CHANGE_MODE";
-
-
     private WalletServicePresenter mWalletServicePresenter;
     private SharedPreferences mSharedPreferences;
 

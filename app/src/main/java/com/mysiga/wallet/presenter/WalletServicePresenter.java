@@ -57,7 +57,7 @@ public class WalletServicePresenter {
     private boolean mIsFirstChecked;
     private Handler mHandler;
 
-    public WalletServicePresenter(@NonNull IWalletServiceView walletServiceView) {
+    public WalletServicePresenter(IWalletServiceView walletServiceView) {
         mWalletServiceView = walletServiceView;
     }
 
@@ -65,7 +65,7 @@ public class WalletServicePresenter {
         mIsFirstChecked = isFirstChecked;
     }
 
-    public void onAccessibilityEvent(@NonNull AccessibilityEvent event, @NonNull Context context) {
+    public void onAccessibilityEvent(AccessibilityEvent event, Context context) {
         final int eventType = event.getEventType();
         Log.d(this.getClass().getSimpleName(), "事件---->" + event);
         //通知栏事件
@@ -74,10 +74,9 @@ public class WalletServicePresenter {
                 openRedWalletNotification(event, context);
             }
         } else if (eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-            switchRedWalletView(event, context);
-
+            openRedWalletStep(event, context);
         } else if (eventType == AccessibilityEvent.TYPE_VIEW_SCROLLED) {
-            quickReceiveRedView(event);
+            openListRedView(event);
         }
     }
 
@@ -85,7 +84,7 @@ public class WalletServicePresenter {
         List<CharSequence> messages = event.getText();
         if (!messages.isEmpty()) {
             String message = String.valueOf(messages.get(0));
-            if (message.contains(WalletServicePresenter.WECHAT_RED_TEXT_KEY)) {
+            if (message.contains(WECHAT_RED_TEXT_KEY)) {
                 return true;
             }
         }
@@ -96,7 +95,7 @@ public class WalletServicePresenter {
      * 打开通知栏消息
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void openRedWalletNotification(@NonNull AccessibilityEvent event, @NonNull Context context) {
+    private void openRedWalletNotification(AccessibilityEvent event, Context context) {
         Parcelable parcelable = event.getParcelableData();
         if (parcelable == null || !(parcelable instanceof Notification)) {
             return;
@@ -106,39 +105,38 @@ public class WalletServicePresenter {
         try {
             pendingIntent.send();
             //解决在微信首页微信红包通知后无法触发AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED事件问题
-            receiveRedWalletView(context);
+            searchRedWalletView(context);
         } catch (PendingIntent.CanceledException e) {
             e.printStackTrace();
         }
     }
 
-    private void switchRedWalletView(@NonNull AccessibilityEvent event, @NonNull Context context) {
+    private void openRedWalletStep(AccessibilityEvent event, Context context) {
         String eventName = String.valueOf(event.getClassName());
         //拆红包界面
         if (eventName.equals(LUCKY_MONEY_RECEIVE_UI)) {
             //拆红包
-            selectRedWalletView();
+            clickRedWalletView();
         } else if (eventName.equals(LUCKY_MONEY_DETAIL_UI)) {
             ////红包详情页面,拆完红包后看详细的纪录界面
         } else if (eventName.equals(LAUNCHER_UI)) {
             ////红包详情页面,点中领取红包
-            receiveRedWalletView(context);
+            searchRedWalletView(context);
         }
 
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-    private void selectRedWalletView() {
+    private void clickRedWalletView() {
         AccessibilityNodeInfo nodeInfo = mWalletServiceView.getAccessibilityService().getRootInActiveWindow();
         if (nodeInfo == null) {
             return;
         }
-        //V4.3.13.49
-        List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId(WalletServicePresenter.WHART_VIEW_ID);
+        List<AccessibilityNodeInfo> list = nodeInfo.findAccessibilityNodeInfosByViewId(WHART_VIEW_ID);
         if (list.isEmpty()) {
-            list = nodeInfo.findAccessibilityNodeInfosByText(WalletServicePresenter.LOOK_DETAIL_TEXT_KEY);
+            list = nodeInfo.findAccessibilityNodeInfosByText(LOOK_DETAIL_TEXT_KEY);
             if (list.isEmpty()) {
-                list = nodeInfo.findAccessibilityNodeInfosByText(WalletServicePresenter.LOOK_ALL_TEXT_KEY);
+                list = nodeInfo.findAccessibilityNodeInfosByText(LOOK_ALL_TEXT_KEY);
             }
             if (!list.isEmpty()) {
                 AccessibilityNodeInfo parent = list.get(list.size() - 1).getParent();
@@ -177,7 +175,7 @@ public class WalletServicePresenter {
      * 检查屏幕是否亮着并且唤醒屏幕
      */
     @TargetApi(Build.VERSION_CODES.KITKAT_WATCH)
-    private void wakeScreen(@NonNull Context context) {
+    private void wakeScreen(Context context) {
         PowerManager powerManager = (PowerManager) context.getApplicationContext().getSystemService(Context.POWER_SERVICE);
         if (!powerManager.isInteractive()) {
             KeyguardManager keyguardManager = (KeyguardManager) context.getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
@@ -194,7 +192,7 @@ public class WalletServicePresenter {
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void receiveRedWalletView(@NonNull Context context) {
+    private void searchRedWalletView(Context context) {
         wakeScreen(context);
         AccessibilityNodeInfo nodeInfo = mWalletServiceView.getAccessibilityService().getRootInActiveWindow();
         if (nodeInfo == null) {
@@ -204,18 +202,16 @@ public class WalletServicePresenter {
         if (list != null && !list.isEmpty()) {
             //最新的红包领起
             AccessibilityNodeInfo parent = list.get(list.size() - 1).getParent();
-            if (parent != null) {
-                if (mIsFirstChecked) {
-                    parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
-                    setIsFirstChecked(false);
-                }
+            if (parent != null && mIsFirstChecked) {
+                parent.performAction(AccessibilityNodeInfo.ACTION_CLICK);
+                setIsFirstChecked(false);
             }
         }
     }
 
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void quickReceiveRedView(@NonNull AccessibilityEvent event) {
+    private void openListRedView(AccessibilityEvent event) {
         String eventName = String.valueOf(event.getClassName());
         if (eventName.equals(LIST_VIEW)) {
             //在聊天界面,点击"领取红包"

@@ -15,7 +15,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.mysiga.wallet.interfaces.IWalletConfigView;
-import com.mysiga.wallet.presenter.WalletPresenter;
 import com.mysiga.wallet.service.WalletService;
 
 /**
@@ -23,7 +22,7 @@ import com.mysiga.wallet.service.WalletService;
  *
  * @author Wilson milin411@163.com
  */
-public class MainActivity extends PreferenceActivity implements View.OnClickListener, IWalletConfigView, AccessibilityManager.AccessibilityStateChangeListener {
+public class MainActivity extends PreferenceActivity implements View.OnClickListener, AccessibilityManager.AccessibilityStateChangeListener {
     private Button mStartServer;
     //AccessibilityService 管理
     private AccessibilityManager accessibilityManager;
@@ -41,15 +40,6 @@ public class MainActivity extends PreferenceActivity implements View.OnClickList
             }
         });
         addPreferencesFromResource(R.xml.pref_mode);
-        Preference preference = findPreference(getString(R.string.pref_key_mode));
-        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
-                sendBroadcast(new Intent(WalletService.INTENT_ACTION_CHANGE_MODE));
-                return true;
-            }
-        });
-
         //监听AccessibilityService 变化
         accessibilityManager = (AccessibilityManager) getSystemService(Context.ACCESSIBILITY_SERVICE);
         accessibilityManager.addAccessibilityStateChangeListener(this);
@@ -76,16 +66,6 @@ public class MainActivity extends PreferenceActivity implements View.OnClickList
             }
         }
         return false;
-    }
-
-
-    @Override
-    public void updateWalletServiceState() {
-    }
-
-    @Override
-    public Context getContext() {
-        return this;
     }
 
     @Override
