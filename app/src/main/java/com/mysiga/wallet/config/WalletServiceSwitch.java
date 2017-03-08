@@ -6,14 +6,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * 服务器状态
- *
- * @author Wilson milin411@163.com
+ * service status
  */
 public class WalletServiceSwitch {
     @IntDef({STATE_NO_START, STATE_NOTIFICATION_SERVICE, STATE_WINDOWS_SERVICE})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface WalletServiceState {
+    public @interface ServiceState {
     }
 
     /**

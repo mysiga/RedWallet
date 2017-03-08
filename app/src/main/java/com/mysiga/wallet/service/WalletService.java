@@ -11,14 +11,12 @@ import android.view.accessibility.AccessibilityEvent;
 
 import com.mysiga.wallet.R;
 import com.mysiga.wallet.presenter.WalletServicePresenter;
-import com.mysiga.wallet.interfaces.IWalletServiceView;
+import com.mysiga.wallet.interfaces.IServiceView;
 
 /**
  * redWallet service
- *
- * @author Wilson milin411@163.com
  */
-public class WalletService extends AccessibilityService implements IWalletServiceView,
+public class WalletService extends AccessibilityService implements IServiceView,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     /***
@@ -44,7 +42,7 @@ public class WalletService extends AccessibilityService implements IWalletServic
 
     @Override
     public void onInterrupt() {
-        
+
     }
 
     @Override

@@ -15,14 +15,12 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import java.util.List;
+import com.mysiga.wallet.interfaces.IServiceView;
 
-import com.mysiga.wallet.interfaces.IWalletServiceView;
+import java.util.List;
 
 /**
  * 服务处理类
- *
- * @author Wilson milin411@163.com
  */
 public class WalletServicePresenter {
     /**
@@ -53,11 +51,11 @@ public class WalletServicePresenter {
      */
     public static final String LAUNCHER_UI = "com.tencent.mm.ui.LauncherUI";
     public static final String LIST_VIEW = "android.widget.ListView";
-    private IWalletServiceView mWalletServiceView;
+    private IServiceView mWalletServiceView;
     private boolean mIsFirstChecked;
     private Handler mHandler;
 
-    public WalletServicePresenter(@NonNull IWalletServiceView walletServiceView) {
+    public WalletServicePresenter(@NonNull IServiceView walletServiceView) {
         mWalletServiceView = walletServiceView;
     }
 

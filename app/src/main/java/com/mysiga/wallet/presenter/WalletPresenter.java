@@ -11,7 +11,7 @@ import com.mysiga.wallet.service.WalletService;
 import java.util.ArrayList;
 
 /**
- * @author Wilson milin411@163.com
+ * wallet mvp-p
  */
 public class WalletPresenter {
     private final ArrayList<WalletModeModel> modes = new ArrayList<>();

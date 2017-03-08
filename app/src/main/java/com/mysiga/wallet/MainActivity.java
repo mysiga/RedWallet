@@ -19,8 +19,6 @@ import com.mysiga.wallet.service.WalletService;
 
 /**
  * 主页
- *
- * @author Wilson milin411@163.com
  */
 public class MainActivity extends PreferenceActivity implements View.OnClickListener, IWalletConfigView {
     private WalletPresenter mWalletPresenter;

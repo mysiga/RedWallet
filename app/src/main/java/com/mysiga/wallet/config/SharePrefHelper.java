@@ -6,8 +6,6 @@ import android.support.annotation.NonNull;
 
 /**
  * SharedPreferences帮助类
- *
- * @author Wilson milin411@163.com
  */
 public class SharePrefHelper {
 
